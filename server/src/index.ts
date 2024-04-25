@@ -4,6 +4,7 @@ import { Server, Socket } from "socket.io";
 import dotenv from "dotenv";
 import Room from "./Room";
 import User from "./User";
+import config from "./config";
 
 dotenv.config();
 
@@ -32,10 +33,27 @@ io.on("connection", (socket: Socket) => {
 
   room.addUser(user);
 
+  if (room.gameStarted && room.round && room.round.isActive) {
+    const roundInfo = room.getRoundInfo();
+    socket.emit("gameStart");
+    socket.emit("roundStart", {
+      ...roundInfo,
+      word: roundInfo.word.replace(/./gs, "_"),
+    });
+    socket.emit("drawingState", room.drawingState);
+  }
+
   socket.on("lineDraw", (msg, roomId): void => {
-    console.log("ram", room);
-    room.broadcast("lineDraw", msg, user);
+    if (room.getActiveUser().id === user.id) {
+      room.addToDrawingState(msg);
+      room.broadcast("lineDraw", msg, user);
+    }
   });
+
+  if (room.users.length === config.MIN_PLAYERS_PER_ROOM) {
+    room.startGame();
+    room.startRound();
+  }
 });
 
 const PORT: string = process.env.PORT!;

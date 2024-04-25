@@ -12,6 +12,10 @@ class User {
     this.score = 0;
     this.socket = socket;
   }
+
+  describe() {
+    return { id: this.id, username: this.username, score: this.score };
+  }
 }
 
 export default User;
