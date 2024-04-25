@@ -1,0 +1,22 @@
+{
+  "name": "aakriti",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:server": "npm run --prefix ./server dev",
+    "start:client": "npm --prefix ./client start",
+    "start": "concurrently npm:start:*",
+    "lint:server": "npm run --prefix ./server lint",
+    "lint:client": "npm run --prefix ./client lint",
+    "lint": "concurrently \"npm run lint:*\"",
+    "format": "prettier --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iaavas/aakriti.git"
+  },
+  "author": "Aavash Baral",
+  "license": "ISC"
+}
