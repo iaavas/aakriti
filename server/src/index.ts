@@ -35,12 +35,26 @@ io.on("connection", (socket: Socket) => {
 
   if (room.gameStarted && room.round && room.round.isActive) {
     const roundInfo = room.getRoundInfo();
+    console.log(roundInfo.word);
     socket.emit("gameStart");
     socket.emit("roundStart", {
       ...roundInfo,
-      word: roundInfo.word.replace(/./gs, "_"),
+      word: roundInfo.word,
     });
     socket.emit("drawingState", room.drawingState);
+  }
+
+  if (room.users.length < config.MIN_PLAYERS_PER_ROOM) {
+    setTimeout(
+      () =>
+        room.broadcastChatMsg({
+          type: "alert",
+          msg: `need ${
+            config.MIN_PLAYERS_PER_ROOM - room.users.length
+          } more player(s) to start the game`,
+        }),
+      50
+    );
   }
 
   socket.on("lineDraw", (msg, roomId): void => {

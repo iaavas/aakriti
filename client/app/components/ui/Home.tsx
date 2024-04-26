@@ -8,7 +8,6 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = (props) => {
   const [usernameInput, setUsernameInput] = React.useState("");
-  const router = useRouter();
 
   return (
     <div className="flex items-center justify-center">
@@ -25,7 +24,6 @@ const Home: React.FC<HomeProps> = (props) => {
             }
             props.setUsername(usernameInput);
             Socket.initializeSocket(usernameInput);
-            router.push("/play");
           }}
           className="flex flex-col gap-4"
         >

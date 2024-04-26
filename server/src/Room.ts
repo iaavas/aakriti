@@ -18,6 +18,7 @@ class Room {
     this.activeUserIdx = 0;
     this.round = null;
     this.endRoundTimeOut = null;
+    console.log(this.users);
   }
 
   getActiveUser(): User {
@@ -28,6 +29,7 @@ class Room {
     if (this.users.length > config.MAX_USERS_PER_ROOM) {
       throw new Error("too many players");
     }
+
     this.users.push(user);
     this.broadcast("userJoin", user.describe());
     this.broadcastChatMsg({
