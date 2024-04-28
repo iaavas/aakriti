@@ -1,4 +1,4 @@
 /client/node_modules/
 /client/.next/
 /server/node_modules/
-
+.vscode/
