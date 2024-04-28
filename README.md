@@ -7,9 +7,7 @@ Aakriti is a web-based implementation of the classic party game "Pictionary," re
 - Engaging gameplay that mirrors the traditional Pictionary experience.
 - Intuitive user interface designed for seamless navigation and interaction.
 - Multiplayer support, allowing friends and family to play together remotely.
-- Diverse word database to challenge players of all skill levels.
 - Real-time drawing and guessing, enhancing the excitement and competitiveness of the game.
-- Customizable settings to tailor the game experience to your preferences.
 
 ## How to Run the Game
 
