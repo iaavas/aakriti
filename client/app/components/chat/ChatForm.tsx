@@ -6,6 +6,7 @@ const ChatForm: React.FC = () => {
   return (
     <form
       id="chatbox-form"
+      className=""
       onSubmit={(ev): void => {
         ev.preventDefault();
         if (chatInput === "") {
@@ -17,6 +18,8 @@ const ChatForm: React.FC = () => {
     >
       <input
         data-testid="chat-input"
+        className="border border-black p-2 w-full "
+        placeholder="Type your guess here..."
         type="text"
         value={chatInput}
         onChange={(ev): void => setChatInput(ev.target.value)}

@@ -31,18 +31,15 @@ const Game: React.FC<GameProps> = ({ canvasWidth, canvasHeight }) => {
   const { drawingPermission } = useGame();
   const socket = Socket.getSocket();
   return (
-    <>
+    <div className="bg-hero  p-2 flex flex-col " style={{ height: "100vh" }}>
       <RoundInfo />
-      <div id="game-container">
+      <div className="flex  justify-around gap-x-1 ">
         <RoundScoreOverlay />
-
         <Scoreboard />
         <Canvas width={canvasWidth} height={canvasHeight} />
-        {drawingPermission && <StylePicker />}
-
-        <Chatbox />
+        {drawingPermission ? <StylePicker /> : <Chatbox />}
       </div>
-    </>
+    </div>
   );
 };
 

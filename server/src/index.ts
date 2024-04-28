@@ -12,7 +12,7 @@ const app: Application = express();
 const server: http.Server = http.createServer(app);
 const io: Server = new Server(server);
 
-const rooms: Room[] = [];
+let rooms: Room[] = [];
 
 io.on("connection", (socket: Socket) => {
   if (rooms.length === 0) {
@@ -36,7 +36,9 @@ io.on("connection", (socket: Socket) => {
   if (room.gameStarted && room.round && room.round.isActive) {
     const roundInfo = room.getRoundInfo();
     console.log(roundInfo.word);
-    socket.emit("gameStart");
+    socket.emit("gameStart", {
+      room: roomIdx,
+    });
     socket.emit("roundStart", {
       ...roundInfo,
       word: roundInfo.word,
@@ -58,6 +60,7 @@ io.on("connection", (socket: Socket) => {
   }
 
   socket.on("lineDraw", (msg, roomId): void => {
+    if (!room.getActiveUser().id) return;
     if (room.getActiveUser().id === user.id) {
       room.addToDrawingState(msg);
       room.broadcast("lineDraw", msg, user);
@@ -68,6 +71,80 @@ io.on("connection", (socket: Socket) => {
     room.startGame();
     room.startRound();
   }
+
+  socket.on("chatMsg", (msg): void => {
+    const round = room.round;
+    if (round && round.isActive && room.getActiveUser()) {
+      if (user.id === room.getActiveUser().id) {
+        room.broadcastChatMsgToCorrectGuessers({
+          msg: msg.msg,
+          type: "good",
+          username: user.username,
+        });
+        return;
+      }
+      if (round.didUserGuess(user.id)) {
+        room.broadcastChatMsgToCorrectGuessers({
+          msg: msg.msg,
+          type: "good",
+          username: user.username,
+        });
+      } else {
+        if (round.word === msg.msg) {
+          user.socket.emit("chatMsg", {
+            msg: msg.msg,
+            type: "good",
+            username: user.username,
+          });
+          room.broadcastChatMsgToCorrectGuessers({
+            msg: msg.msg,
+            type: "good",
+            username: user.username,
+          });
+          room.broadcastChatMsg({
+            type: "good",
+            msg: `${user.username} guessed the word correctly`,
+          });
+          round.assignUserScore(user.id);
+          if (
+            round.didEveryoneGuessCorrectly(room.getActiveUser().id, room.users)
+          ) {
+            clearTimeout(room.endRoundTimeOut as NodeJS.Timeout);
+            room.endRound();
+            room.endRoundTimeOut = setTimeout(
+              () => room.startNextRound(),
+              config.ROUND_DELAY
+            );
+          }
+        } else {
+          room.broadcastChatMsg({ ...msg, username: user.username });
+        }
+      }
+    } else {
+      room.broadcastChatMsg({ ...msg, username: user.username });
+    }
+  });
+
+  socket.on("disconnect", (): void => {
+    const activeUser = room.getActiveUser();
+    room.removeUser(user);
+    if (room.users.length < config.MIN_PLAYERS_PER_ROOM) {
+      if (room.gameStarted) {
+        room.endGame();
+        rooms = rooms.filter((rm) => room !== rm);
+        return;
+      }
+    }
+    if (activeUser && activeUser.id === user.id) {
+      room.activeUserIdx--;
+      clearTimeout(room.endRoundTimeOut as NodeJS.Timeout);
+      room.endRound(activeUser);
+      room.endRoundTimeOut = setTimeout(
+        () => room.startNextRound(),
+        config.ROUND_DELAY
+      );
+    }
+  });
 });
 
 const PORT: string = process.env.PORT!;

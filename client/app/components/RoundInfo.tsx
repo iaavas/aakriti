@@ -9,27 +9,29 @@ export type RoundTime = {
 };
 
 const RoundInfo: React.FC = () => {
-  const { isWaitingForNextRd, roundTime, word } = useGame();
-  console.log(word);
+  const { isWaitingForNextRd, roundTime, word, room } = useGame();
 
-  let renderedContent: JSX.Element;
-  if (isWaitingForNextRd) {
-    return (
-      <div id="roundinfo-container">
-        <div id="round-waiting">Waiting for next round...</div>
-      </div>
-    );
-  }
-  if (roundTime && word) {
-    renderedContent = (
-      <>
-        <Timer roundTime={roundTime}></Timer>
-        <div id="round-word">{word}</div>
-      </>
-    );
-  } else {
-    renderedContent = <div id="round-waiting">Waiting... haha</div>;
-  }
-  return <div id="roundinfo-container">{renderedContent}</div>;
+  return (
+    <div className="bg-white w-full h-12 p-2 flex items-center justify-center mb-2 font-bold rounded-sm">
+      {isWaitingForNextRd ? (
+        <div className="text-black font-bg">Waiting for next round...</div>
+      ) : roundTime && word ? (
+        <div className="flex items-center justify-between gap-x-16">
+          <div className="flex items-center">
+            <Timer roundTime={roundTime}></Timer>
+          </div>
+          <div className="tracking-wider uppercase font-bold text-lg">
+            {word}
+          </div>
+          <div className="tracking-wider uppercase font-bold text-lg">
+            {room}
+          </div>
+        </div>
+      ) : (
+        <div className="text-gray-500">Waiting</div>
+      )}
+    </div>
+  );
 };
+
 export default RoundInfo;

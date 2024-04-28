@@ -141,6 +141,14 @@ class Room {
       this.startRound();
     }
   }
+
+  broadcastChatMsgToCorrectGuessers(msg: ChatMsg) {
+    const correctGuessers = this.users.filter((user) =>
+      this.round?.didUserGuess(user.id)
+    );
+    correctGuessers.push(this.getActiveUser());
+    correctGuessers.forEach((user) => user.socket.emit("chatMsg", msg));
+  }
 }
 
 export default Room;

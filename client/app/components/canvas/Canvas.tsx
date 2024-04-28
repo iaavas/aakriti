@@ -14,14 +14,14 @@ const Canvas: React.FC<CanvasProps> = (props) => {
   useLayoutEffect(() => {
     const canvas = ref.current as HTMLCanvasElement;
     canvas.height = 500;
-    canvas.width = 500;
+    canvas.width = 700;
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     ctx.lineWidth = 20;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     // @ts-ignore
     setCtx(ctx);
-  }, [props.height, props.width, setCtx]);
+  }, [setCtx]);
   return (
     <canvas
       ref={ref}
@@ -29,7 +29,7 @@ const Canvas: React.FC<CanvasProps> = (props) => {
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
       data-testid="canvas"
-      className="bg-red-200"
+      className="bg-white rounded-sm"
     ></canvas>
   );
 };

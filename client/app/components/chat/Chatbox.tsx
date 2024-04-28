@@ -14,9 +14,17 @@ const Chatbox: React.FC = () => {
     };
   }, [messages, socket]);
   return (
-    <div id="chatbox-container">
-      <ChatMessages messages={messages}></ChatMessages>
-      <ChatForm></ChatForm>
+    <div className="flex flex-col  bg-white rounded-sm w-1/4 h-2/3">
+      <div className="flex-grow overflow-y-auto">
+        <div className="mx-auto max-w-3xl ">
+          <ChatMessages messages={messages} />
+        </div>
+      </div>
+      <div className="bg-white shadow-md">
+        <div className="mx-auto max-w-3xl px-4 py-4">
+          <ChatForm />
+        </div>
+      </div>
     </div>
   );
 };

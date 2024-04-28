@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import CanvasProvider from "./context/CanvasContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Nunito({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",

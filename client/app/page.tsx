@@ -10,7 +10,7 @@ export default function Page() {
   if (username == null) return <Home setUsername={setUsername} />;
   return (
     <GameProvider username={username} exitGame={() => setUsername(null)}>
-      <Game canvasHeight={500} canvasWidth={500} />;
+      <Game canvasHeight={500} canvasWidth={500} />
     </GameProvider>
   );
 }

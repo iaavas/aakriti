@@ -10,7 +10,7 @@ const Home: React.FC<HomeProps> = (props) => {
   const [usernameInput, setUsernameInput] = React.useState("");
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center h-screen bg-hero  bg-repeat">
       <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full">
         <h1 className="text-4xl font-semibold mb-1 text-center ">Aakriti</h1>
         <p className="text-sm  mb-4 text-center italic text-gray-400">
